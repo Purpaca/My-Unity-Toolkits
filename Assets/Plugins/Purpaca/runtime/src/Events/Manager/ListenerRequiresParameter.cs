@@ -50,7 +50,7 @@ namespace Purpaca.Events
 
         public void Invoke(object parameter)
         {
-            if(parameter == null && !m_invokeWithoutParameter) 
+            if (parameter == null && !m_invokeWithoutParameter)
             {
                 return;
             }
@@ -89,9 +89,9 @@ namespace Purpaca.Events
         #endregion
 
         #region Public 方法
-        public void Invoke() 
+        public void Invoke()
         {
-            if (m_invokeWithoutParameter) 
+            if (m_invokeWithoutParameter)
             {
                 Invoke(default);
             }
@@ -99,7 +99,7 @@ namespace Purpaca.Events
 
         public void Invoke(T parameter)
         {
-            if (parameter == null && !m_invokeWithoutParameter) 
+            if (parameter == null && !m_invokeWithoutParameter)
             {
                 return;
             }

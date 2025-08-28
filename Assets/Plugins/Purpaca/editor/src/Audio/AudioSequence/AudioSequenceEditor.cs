@@ -1,3 +1,4 @@
+using Purpaca.Audio;
 using UnityEditor;
 
 namespace Purpaca.Editor.Audio

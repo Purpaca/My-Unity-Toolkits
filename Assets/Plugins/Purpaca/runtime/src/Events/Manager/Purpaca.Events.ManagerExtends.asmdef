@@ -1,0 +1,16 @@
+{
+    "name": "Purpaca.Events.ManagerExtends",
+    "rootNamespace": "",
+    "references": [
+        "GUID:5b666795156edb94fbac9c74794e9259"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

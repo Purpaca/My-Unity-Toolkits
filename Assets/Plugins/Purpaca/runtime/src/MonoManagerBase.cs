@@ -20,7 +20,7 @@ namespace Purpaca
         #region Protected 方法
         /// <summary>
         /// 当管理器被初始化时调用
-        /// 相当于<see cref="UnityEngine.MonoBehaviour"/>的 Awake() 方法"/>
+        /// 相当于<see cref="UnityEngine.MonoBehaviour"/>的 Awake() 方法
         /// </summary>
         protected virtual void OnInit() { }
         #endregion
