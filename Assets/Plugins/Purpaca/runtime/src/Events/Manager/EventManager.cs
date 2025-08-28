@@ -69,7 +69,7 @@ namespace Purpaca
             }
 
             ListenerNonParameter listener = new ListenerNonParameter(callback);
-            
+
             return m_events[eventName].AddListener(listener);
         }
 
@@ -88,7 +88,7 @@ namespace Purpaca
             }
 
             ListenerRequiresParameter<T> listener = new ListenerRequiresParameter<T>(callback);
-            
+
             return m_events[eventName].AddListener(listener);
         }
 
@@ -108,7 +108,7 @@ namespace Purpaca
             }
 
             ListenerRequiresParameter<T> listener = new ListenerRequiresParameter<T>(callback, invokeWithoutParameter);
-            
+
             return m_events[eventName].AddListener(listener);
         }
 
@@ -127,7 +127,7 @@ namespace Purpaca
             }
 
             ListenerRequiresParameter listener = new ListenerRequiresParameter(callback, type);
-            
+
             return m_events[eventName].AddListener(listener);
         }
 
@@ -147,7 +147,7 @@ namespace Purpaca
             }
 
             ListenerRequiresParameter listener = new ListenerRequiresParameter(callback, type, invokeWithoutParameter);
-            
+
             return m_events[eventName].AddListener(listener);
         }
 
@@ -161,7 +161,7 @@ namespace Purpaca
             if (m_events.ContainsKey(eventName))
             {
                 m_events[eventName].RemoveListener(guid);
-                if (m_events[eventName].ListenerCount <= 0) 
+                if (m_events[eventName].ListenerCount <= 0)
                 {
                     m_events.Remove(eventName);
                 }
@@ -197,11 +197,11 @@ namespace Purpaca
         #endregion
 
         #region 内部类型
-        private class EventInfo 
+        private class EventInfo
         {
             #region 字段
             private Event m_event;
-            private Dictionary<string,IEventListenerBase> m_listeners;
+            private Dictionary<string, IEventListenerBase> m_listeners;
             #endregion
 
             #region 构造器
@@ -264,9 +264,9 @@ namespace Purpaca
             /// 移除指定的事件监听者
             /// </summary>
             /// <param name="guid">要移除的事件监听者的唯一标识ID</param>
-            public void RemoveListener(string guid) 
+            public void RemoveListener(string guid)
             {
-                if (m_listeners.ContainsKey(guid)) 
+                if (m_listeners.ContainsKey(guid))
                 {
                     m_event.RemoveListener(m_listeners[guid]);
                     m_listeners.Remove(guid);

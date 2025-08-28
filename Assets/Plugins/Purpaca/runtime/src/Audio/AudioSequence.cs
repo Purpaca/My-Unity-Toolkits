@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Purpaca
+namespace Purpaca.Audio
 {
     /// <summary>
     /// 音频序列

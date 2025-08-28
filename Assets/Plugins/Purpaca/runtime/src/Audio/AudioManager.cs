@@ -5,7 +5,7 @@ using UnityEngine.Audio;
 using UnityEngine.Events;
 using IEnumerator = System.Collections.IEnumerator;
 
-namespace Purpaca
+namespace Purpaca.Audio
 {
     /// <summary>
     /// 音频管理器，提供分轨音量管理、多音频序列播放、音频播放完毕执行回调等功能
@@ -14,7 +14,7 @@ namespace Purpaca
     {
         #region 字段
         private AudioMixer _mixer;
-        private AudioMixerGroup _masterGroup, _musicGroup, _soundGroup, _otherGroup;
+        private AudioMixerGroup _masterGroup, _musicGroup, _soundGroup;
 
         private int m_maxPooledAudioSourceCount = 50;
         private int m_maxPooledHandleCount = 50;
@@ -22,7 +22,6 @@ namespace Purpaca
         private float m_masterVolume = 1.0f;    // 全局音频播放音量
         private float m_musicVolume = 1.0f;     // 音乐音频播放音量
         private float m_soundVolume = 1.0f;     // 音效音频播放音量
-        private float m_otherVolume = 1.0f;     // 其它音频播放音量
 
         private List<Handle> m_oneShotHandles;
         private Dictionary<string, Handle> m_managedHandles;
@@ -94,20 +93,6 @@ namespace Purpaca
                 instance.m_soundVolume = Mathf.Clamp01(value);
                 float db = Convert01ToDB(value);
                 instance._mixer.SetFloat("SoundVolume", db);
-            }
-        }
-
-        /// <summary>
-        /// 其它音频播放音量
-        /// </summary>
-        public static float OtherVolume
-        {
-            get => instance.m_otherVolume;
-            set
-            {
-                instance.m_otherVolume = Mathf.Clamp01(value);
-                float db = Convert01ToDB(value);
-                instance._mixer.SetFloat("OtherVolume", db);
             }
         }
 
@@ -517,7 +502,7 @@ namespace Purpaca
                     break;
                 case AudioOutputChannel.Other:
                 default:
-                    mixerGroup = instance._otherGroup;
+                    mixerGroup = instance._masterGroup;
                     break;
             }
 
@@ -541,7 +526,7 @@ namespace Purpaca
                     break;
                 case AudioOutputChannel.Other:
                 default:
-                    mixerGroup = instance._otherGroup;
+                    mixerGroup = instance._masterGroup;
                     break;
             }
 
@@ -724,9 +709,8 @@ namespace Purpaca
                 _masterGroup = _mixer.FindMatchingGroups("Master")[0];
                 _musicGroup = _mixer.FindMatchingGroups("Master/Music")[0];
                 _soundGroup = _mixer.FindMatchingGroups("Master/Sound")[0];
-                _otherGroup = _mixer.FindMatchingGroups("Master/Other")[0];
 
-                if (_masterGroup == null || _musicGroup == null || _soundGroup == null || _otherGroup == null)
+                if (_masterGroup == null || _musicGroup == null || _soundGroup == null)
                 {
                     throw new Exception();
                 }
@@ -734,11 +718,10 @@ namespace Purpaca
                 MasterVolume = 1.0f;
                 MusicVolume = 1.0f;
                 SoundVolume = 1.0f;
-                OtherVolume = 1.0f;
             }
             catch
             {
-                throw new NullReferenceException("Unable to load the preset AudioMixer asset or the asset is modified!");
+                throw new NullReferenceException("Purpaca.AudioManager:Unable to load the preset AudioMixer asset or the asset is modified!");
             }
             #endregion
 
@@ -841,7 +824,7 @@ namespace Purpaca
                                 m_audioSource.outputAudioMixerGroup = instance._musicGroup;
                                 break;
                             default:
-                                m_audioSource.outputAudioMixerGroup = instance._otherGroup;
+                                m_audioSource.outputAudioMixerGroup = instance._masterGroup;
                                 break;
                         }
                     }

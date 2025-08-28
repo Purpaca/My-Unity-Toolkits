@@ -11,7 +11,7 @@ namespace Purpaca.Editor
 
         #region ScriptableObject Asset相关
         /// <summary>
-        /// 创建指定类型的ScriptableObject资产
+        /// 在当前 Projects视图 中选择的路径下创建指定类型的ScriptableObject资产（如果当前在 Projects视图 中没有选择有效的路径，将直接在"Assets"下创建）
         /// </summary>
         /// <typeparam name="T">要创建的ScriptableObject资源的类型</typeparam>
         /// <param name="assetName">要创建资源的名称</param>
@@ -22,7 +22,7 @@ namespace Purpaca.Editor
         }
 
         /// <summary>
-        /// 创建指定类型的ScriptableObject资产
+        /// 在当前 Projects视图 中选择的路径下创建指定类型的ScriptableObject资产（如果当前在 Projects视图 中没有选择有效的路径，将直接在"Assets"下创建）
         /// </summary>
         /// <param name="type">要创建的ScriptableObject资源的类型</param>
         /// <param name="assetName">要创建资源的名称</param>
@@ -60,6 +60,18 @@ namespace Purpaca.Editor
 
             Selection.activeObject = scriptable;
         }
+
+        /*
+        public static void CreateScriptableAsset(ref ScriptableObject scriptable, string assetName, string path)
+        {
+            path = AssetDatabase.GenerateUniqueAssetPath(Path.Combine(path, $"{assetName}.asset"));
+            AssetDatabase.CreateAsset(scriptable, path);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+            EditorUtility.FocusProjectWindow();
+            Selection.activeObject = scriptable;
+        }
+        */
         #endregion
 
         #endregion
