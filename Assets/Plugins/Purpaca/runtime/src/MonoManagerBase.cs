@@ -26,7 +26,7 @@ namespace Purpaca
         #endregion
 
         #region Unity 消息
-        protected override void Awake()
+        protected sealed override void Awake()
         {
             base.Awake();
             DontDestroyOnLoad(instance.gameObject);

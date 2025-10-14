@@ -1,6 +1,6 @@
 {
     "name": "Purpaca.Events.ManagerExtends",
-    "rootNamespace": "",
+    "rootNamespace": "Purpaca.Events",
     "references": [
         "GUID:5b666795156edb94fbac9c74794e9259"
     ],

@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Events;
+using Purpaca.Audio;
 using IEnumerator = System.Collections.IEnumerator;
 
-namespace Purpaca.Audio
+namespace Purpaca
 {
     /// <summary>
     /// 音频管理器，提供分轨音量管理、多音频序列播放、音频播放完毕执行回调等功能

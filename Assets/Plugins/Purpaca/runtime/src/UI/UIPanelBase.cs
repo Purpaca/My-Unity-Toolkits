@@ -23,10 +23,6 @@ namespace Purpaca.UI
         private UIPanelBase _root, _top;
         #endregion
 
-        #region 静态字段
-        private static EventSystem m_eventSystem;
-        #endregion
-
         #endregion
 
         #region 属性
@@ -115,15 +111,6 @@ namespace Purpaca.UI
 
         #region Public 方法
         /// <summary>
-        /// 将指定的游戏物体设置为EventSystem当前选择的UI元素
-        /// </summary>
-        public static void SetSelectedUIElement(GameObject target)
-        {
-            InitEventSystem();
-            m_eventSystem.SetSelectedGameObject(target);
-        }
-
-        /// <summary>
         /// 将一个UI面板设置到当前UI面板的顶层
         /// </summary>
         /// <param name="hidePrevious">是否隐藏之前的顶层UI面板？（无论是否隐藏，都将失活之前的顶层UI面板）</param>
@@ -205,29 +192,6 @@ namespace Purpaca.UI
 
         #region Private 方法
         /// <summary>
-        /// 初始化EventSystem
-        /// </summary>
-        private static void InitEventSystem()
-        {
-            if (m_eventSystem == null)
-            {
-                if (EventSystem.current != null)
-                {
-                    m_eventSystem = EventSystem.current;
-                }
-                else
-                {
-                    var esObj = new GameObject("EventSystem");
-                    m_eventSystem = esObj.AddComponent<EventSystem>();
-                    esObj.AddComponent<InputSystemUIInputModule>();
-                }
-            }
-
-            m_eventSystem.SetSelectedGameObject(null);
-            DontDestroyOnLoad(m_eventSystem.gameObject);
-        }
-
-        /// <summary>
         /// 激活此UI面板下层的（先前的）UI面板
         /// </summary>
         private void ActivatePreviousPanel()
@@ -245,8 +209,6 @@ namespace Purpaca.UI
         #region Unity 消息
         private void Awake()
         {
-            InitEventSystem();
-
             m_canvas = GetComponent<Canvas>();
             m_canvasGroup = GetComponent<CanvasGroup>();
 
