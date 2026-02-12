@@ -47,49 +47,19 @@ namespace Purpaca.Events
                 {
                     (listener as IEventListener<T>).Invoke(parameter);
                 }
-                else
-                {
-                    bool foundGenericInterface = false;
-
-                    var interfaces = listener.GetType().GetInterfaces();
-                    foreach (var interfaceType in interfaces)
-                    {
-                        // 获取IEventListener<T>接口,并调用Invoke方法
-                        if (interfaceType.IsGenericType && interfaceType.GetGenericTypeDefinition() == typeof(IEventListener<>))
-                        {
-                            var genericType = interfaceType.GetGenericArguments()[0];
-                            var actualInterfaceType = typeof(IEventListener<>).MakeGenericType(genericType);
-                            var paramType = actualInterfaceType.GetProperty("ParameterType").GetValue(listener) as Type;
-                            if (paramType == typeof(T))
-                            {
-                                var method = actualInterfaceType.GetMethod("Invoke");
-                                method.Invoke(listener, new object[] { parameter });
-                            }
-
-                            foundGenericInterface = true;
-                        }
-                    }
-
-                    if (!foundGenericInterface)
-                    {
-                        // 进入此代码块，则当前listener实现的是非泛型无需参数的IEventListener接口
-                        (listener as IEventListener).Invoke();
-                    }
-                }
             }
         }
 
         /// <summary>
         /// 广播事件并提供参数
         /// </summary>
+        /// <remarks>此方法依赖于反射，存在一定程度上的性能损耗，谨慎使用！</remarks>
         /// <param name="parameter">提供的参数</param>
         /// <param name="type">所提供参数的类型</param>
         public void Broadcast(object parameter, Type type)
         {
             foreach (var listener in m_listeners)
             {
-                bool foundGenericInterface = false;
-
                 var interfaces = listener.GetType().GetInterfaces();
                 foreach (var interfaceType in interfaces)
                 {
@@ -104,15 +74,7 @@ namespace Purpaca.Events
                             var method = actualInterfaceType.GetMethod("Invoke");
                             method.Invoke(listener, new object[] { parameter });
                         }
-
-                        foundGenericInterface = true;
                     }
-                }
-
-                if (!foundGenericInterface)
-                {
-                    // 进入此代码块，则当前listener实现的是非泛型无需参数的IEventListener接口
-                    (listener as IEventListener).Invoke();
                 }
             }
         }
@@ -150,25 +112,6 @@ namespace Purpaca.Events
         public void ClearListener()
         {
             m_listeners.Clear();
-        }
-        #endregion
-
-        #region Private 方法
-        /// <summary>
-        /// 以提供为null或默认值的参数的方式广播事件
-        /// </summary>
-        private void BroadcastWithDefaultParameterValue(IEventListenerBase listener)
-        {
-            var method = listener.GetType().GetMethod("Invoke");
-
-            var parameters = method.GetParameters();
-            object[] args = new object[parameters.Length];
-            for (int i = 0; i < parameters.Length; i++)
-            {
-                args[i] = parameters[i].ParameterType.IsValueType ? Activator.CreateInstance(parameters[i].ParameterType) : null;
-            }
-
-            method.Invoke(listener, args);
         }
         #endregion
     }

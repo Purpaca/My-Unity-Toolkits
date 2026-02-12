@@ -24,7 +24,7 @@ namespace Purpaca.Events
         /// <summary>
         /// 所需要提供参数的类型
         /// </summary>
-        public virtual Type ParameterType { get => typeof(T); }
+        public Type ParameterType { get => typeof(T); }
 
         /// <summary>
         /// 事件监听者提供的需要一个参数回调方法

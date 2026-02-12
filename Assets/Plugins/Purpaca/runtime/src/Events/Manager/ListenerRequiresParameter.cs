@@ -1,7 +1,7 @@
 using System;
 using UnityEngine.Events;
 
-namespace Purpaca.Events
+namespace Purpaca.Events.ManagerExtends
 {
     /// <summary>
     /// 非泛型的需要参数的监听者
@@ -10,8 +10,8 @@ namespace Purpaca.Events
     {
         #region 字段
         private bool m_invokeWithoutParameter;
-        private Type m_parameterType;
         private UnityAction<object> m_callback;
+        private Type m_parameterType;
         #endregion
 
         #region 构造器
@@ -19,9 +19,9 @@ namespace Purpaca.Events
         /// <param name="parameterType">所需参数的类型</param>
         public ListenerRequiresParameter(UnityAction<object> callback, Type parameterType)
         {
-            m_invokeWithoutParameter = false;
             m_callback = callback;
             m_parameterType = parameterType;
+            m_invokeWithoutParameter = false;
         }
 
         /// <param name="callback">回调方法</param>
@@ -35,10 +35,6 @@ namespace Purpaca.Events
         }
         #endregion
 
-        #region 属性
-        public Type ParameterType { get => m_parameterType; }
-        #endregion
-
         #region Public 方法
         public void Invoke()
         {
@@ -50,12 +46,18 @@ namespace Purpaca.Events
 
         public void Invoke(object parameter)
         {
-            if (parameter == null && !m_invokeWithoutParameter)
+            var t = parameter?.GetType();
+            if (t != null)
             {
-                return;
+                if (t == m_parameterType)
+                {
+                    m_callback?.Invoke(parameter);
+                }
+                else if (m_invokeWithoutParameter)
+                {
+                    m_callback?.Invoke(null);
+                }
             }
-
-            m_callback?.Invoke(parameter);
         }
         #endregion
     }
@@ -63,8 +65,8 @@ namespace Purpaca.Events
     /// <summary>
     /// 泛型的需要参数的监听者
     /// </summary>
-    /// <typeparam name="T">所需参数的类型</typeparam>
-    internal class ListenerRequiresParameter<T> : IEventListener, IEventListener<T>
+    /// <typeparam name="T"></typeparam>
+    public class ListenerRequiresParameter<T> : IEventListener, IEventListener<object>
     {
         #region 字段
         private bool m_invokeWithoutParameter;
@@ -72,23 +74,18 @@ namespace Purpaca.Events
         #endregion
 
         #region 构造器
-        /// <param name="callback">回调方法</param>
         public ListenerRequiresParameter(UnityAction<T> callback)
         {
-            m_invokeWithoutParameter = false;
             m_callback = callback;
+            m_invokeWithoutParameter = false;
         }
 
-        /// <param name="callback">回调方法</param>
-        /// <param name="invokeWithoutParameter">当监听的事件以未提供参数的方式广播时，是否调用回调方法？</param>
         public ListenerRequiresParameter(UnityAction<T> callback, bool invokeWithoutParameter)
         {
             m_callback = callback;
             m_invokeWithoutParameter = invokeWithoutParameter;
         }
         #endregion
-
-        #region Public 方法
         public void Invoke()
         {
             if (m_invokeWithoutParameter)
@@ -97,15 +94,16 @@ namespace Purpaca.Events
             }
         }
 
-        public void Invoke(T parameter)
+        public void Invoke(object parameter)
         {
-            if (parameter == null && !m_invokeWithoutParameter)
+            if (parameter is T t)
             {
-                return;
+                m_callback?.Invoke(t);
             }
-
-            m_callback?.Invoke(parameter);
+            else if (m_invokeWithoutParameter)
+            {
+                m_callback?.Invoke(default);
+            }
         }
-        #endregion
     }
 }
