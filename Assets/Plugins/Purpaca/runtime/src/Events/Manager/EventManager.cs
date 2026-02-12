@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine.Events;
 using Purpaca.Events;
+using Purpaca.Events.ManagerExtends;
 
 namespace Purpaca
 {
@@ -47,11 +48,11 @@ namespace Purpaca
         /// <param name="eventName">所要广播事件的名称</param>
         /// <param name="parameter">提供的参数</param>
         /// <param name="type">所提供参数的类型</param>
-        public void Broadcast(string eventName, object parameter, Type type)
+        public void Broadcast(string eventName, object parameter)
         {
             if (m_events.ContainsKey(eventName))
             {
-                m_events[eventName].Broadcast(parameter, type);
+                m_events[eventName].Broadcast(parameter);
             }
         }
 
@@ -242,10 +243,9 @@ namespace Purpaca
             /// 广播此事件，并提供参数
             /// </summary>
             /// <param name="parameter">提供的参数</param>
-            /// <param name="type">所提供参数的类型</param>
-            public void Broadcast(object parameter, Type type)
+            public void Broadcast(object parameter)
             {
-                m_event.Broadcast(parameter, type);
+                m_event.Broadcast(parameter);
             }
 
             /// <summary>
